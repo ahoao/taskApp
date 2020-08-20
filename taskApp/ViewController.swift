@@ -12,9 +12,29 @@ import UserNotifications
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
     
+    //    検索ボタンをクリック時
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        view.endEditing(true)
+        
+        let predicate = NSPredicate(format: "category = %@", searchBar.text!)
+        let result = realm.objects(Task.self).filter(predicate)
+        
+        taskArray = result
+        tableView.reloadData()
+        
+        func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
+            tableView.reloadData()
+           
+            
+        }
+        
+    }
+    
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
+    
     
     
     //    Realmインスタンスを取得する
@@ -35,18 +55,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         searchBar.delegate = self
         //        入力ヒント（プレースホルダー）
         searchBar.placeholder = "タスクのカテゴリを入力してください"
-        
-        
-        //    検索ボタンをクリック時
-        func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-            view.endEditing(true)
-            
-            let predicate = NSPredicate(format: "category = %@", searchBar.text!)
-            let result = realm.objects(Task.self).filter(predicate)
-            
-            taskArray = result
-            tableView.reloadData()
-        }
     }
     
     //    データの数（＝セルの数）を返すメソッド
@@ -134,6 +142,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
+        
     }
+    
+    
     
 }
