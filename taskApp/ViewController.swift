@@ -21,15 +21,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         taskArray = result
         tableView.reloadData()
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
+        tableView.reloadData()
         
-        func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
-            tableView.reloadData()
-           
-            
-        }
         
     }
+    
+    
     
     
     @IBOutlet weak var searchBar: UISearchBar!
